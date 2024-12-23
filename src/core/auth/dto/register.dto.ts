@@ -2,7 +2,7 @@ import { Transform } from "class-transformer";
 import { IsEmail, IsString, MinLength } from "class-validator";
 import { Role } from "src/core/enum/role.enum";
 
-export class CreateUserDto {
+export class RegisterDto {
     @IsString()
     @MinLength(3)
     name: string;
@@ -15,6 +15,6 @@ export class CreateUserDto {
     @Transform(({ value }) => value.trim())
     password: string;
 
-    
+
     role: Role;
 }
