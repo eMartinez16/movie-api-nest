@@ -11,6 +11,6 @@ bash:
 db:
 	docker exec -it mysql_db bash
 mysql:
-	docker exec -it mysql_db myql -u tqr --pasword=root -h 127.0.0.1
+	docker exec -it mysql_db myql -u movie_api_user --pasword=root -h 127.0.0.1
 track:
 	docker logs --follow nest_app
