@@ -1,7 +1,8 @@
 import { MinLength } from "class-validator";
 import { Role } from "src/core/enum/role.enum";
-import { Column, CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,8 +17,8 @@ export class User {
     @MinLength(8)
     password: string;
 
-    @Column({ default: 'user' })
-    roles: Role[];
+    @Column({ default: Role.DEFAULT_USER})
+    roles: Role;
 
   
     @CreateDateColumn()

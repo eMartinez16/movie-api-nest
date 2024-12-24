@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsEmail, IsString, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsString, MinLength } from "class-validator";
 import { Role } from "src/core/enum/role.enum";
 
 export class RegisterDto {
@@ -16,5 +16,6 @@ export class RegisterDto {
     password: string;
 
 
+    @IsEnum(Role)
     role: Role;
 }

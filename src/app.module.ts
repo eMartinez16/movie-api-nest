@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TokenValidationMiddleware } from './middleware/token-validation.middleware';
 import { RolesGuard } from './core/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { FilmsModule } from './films/films.module';
 
 @Module({
   imports: [
@@ -15,13 +16,13 @@ import { APP_GUARD } from '@nestjs/core';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host:  config.get<string>('DATABASE_HOST') || 'mysql',
+        host:  config.get<string>('DATABASE_HOST') || 'mysql_db',
         port: +config.get<string>('DATABASE_PORT') || 3306,
         username: config.get<string>('DB_USER') || 'root',
         password: config.get<string>('DB_PASSWORD') || 'root',
         database: config.get<string>('DB_NAME') || 'movie_api',
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
       }),
     }),
     ConfigModule.forRoot({
@@ -29,7 +30,8 @@ import { APP_GUARD } from '@nestjs/core';
       envFilePath: ".env",
     }),
     UserModule,
-    AuthModule
+    AuthModule,
+    FilmsModule
   ],
   controllers: [AppController],
   providers: [
@@ -42,10 +44,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(TokenValidationMiddleware)
-      .exclude(
-        { path: 'auth', method: RequestMethod.POST },
-        'auth/(.*)',
-      )
-      .forRoutes({ path: "**", method: RequestMethod.ALL });
+      .forRoutes({ path: "**", method: RequestMethod.ALL })
   }
 }
