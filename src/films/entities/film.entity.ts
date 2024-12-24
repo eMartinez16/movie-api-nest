@@ -1,5 +1,3 @@
-import { MinLength } from "class-validator";
-import { Role } from "src/core/enum/role.enum";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'films' })
@@ -16,7 +14,7 @@ export class Film {
     @Column({ length: 500 })
     director: string;
 
-    @Column({ length: 500, type: 'text'})
+    @Column({ type: 'text'})
     opening_crawl: string;
 
 
