@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
@@ -7,10 +7,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Film } from './entities/film.entity';
 import { Repository } from 'typeorm';
 import { UpdateFilmDto } from './dto/update-film.dto';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class FilmsService {
     swApiUrl: string =  '';
+    private readonly logger = new Logger(FilmsService.name);
+
 
   constructor(
     private readonly _httpService: HttpService,
@@ -90,6 +93,24 @@ export class FilmsService {
       return await this._filmRepository.softDelete(film.id)
     } catch(error) {
       throw new Error('Error deleting film');    
+    }
+  }
+
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  async syncFilms() {
+    this.logger.log('Synchronizing films from API and DB...');
+    try {
+      const apiData = await firstValueFrom(
+        this._httpService.get('https://swapi.dev/api/films/'),
+      );
+
+      const filmsOnDb = await this._filmRepository.find();
+
+      const combinedFilms = [...filmsOnDb, ...apiData.data.results];
+
+      this.logger.log(`Successfully synchronized ${combinedFilms.length} films.`);
+    } catch (error) {
+      this.logger.error(`Error synchronizing films: ${error.message}`);
     }
   }
 }

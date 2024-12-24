@@ -9,6 +9,7 @@ import { TokenValidationMiddleware } from './middleware/token-validation.middlew
 import { RolesGuard } from './core/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { FilmsModule } from './films/films.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { FilmsModule } from './films/films.module';
     }),
     UserModule,
     AuthModule,
-    FilmsModule
+    FilmsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [

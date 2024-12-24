@@ -14,11 +14,11 @@ export class Film {
     @Column({ length: 500 })
     director: string;
 
-    @Column({ type: 'text'})
-    opening_crawl: string;
+    @Column({ type: 'text', name: 'opening_crawl'})
+    openingCrawl: string;
 
 
-    @CreateDateColumn()
+    @CreateDateColumn({ name: 'release_date'})
     releaseDate: Date;
 
     @UpdateDateColumn()
