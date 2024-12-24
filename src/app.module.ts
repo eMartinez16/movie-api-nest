@@ -14,13 +14,13 @@ import { FilmsModule } from './films/films.module';
   imports: [
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      useFactory: () => ({
         type: 'mysql',
-        host:  config.get<string>('DATABASE_HOST') || 'mysql_db',
-        port: +config.get<string>('DATABASE_PORT') || 3306,
-        username: config.get<string>('DB_USER') || 'root',
-        password: config.get<string>('DB_PASSWORD') || 'root',
-        database: config.get<string>('DB_NAME') || 'movie_api',
+        host:  process.env.DATABASE_HOST || 'mysql_db',
+        port: +process.env.DATABASE_PORT || 3306,
+        username: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || 'root',
+        database: process.env.DB_NAME || 'movie_api',
         autoLoadEntities: true,
         synchronize: false,
       }),
